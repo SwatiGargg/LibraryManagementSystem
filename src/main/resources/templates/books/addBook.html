@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Book</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        form {
+            display: inline-block;
+            text-align: left;
+            padding: 20px;
+            border: 1px solid #3498db;
+            border-radius: 5px;
+        }
+        label {
+            margin: 10px 0;
+            display: block;
+        }
+        input[type="text"] {
+            width: 95%;
+            padding: 10px;
+            margin: 5px 0 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+        .message {
+            color: green;
+            margin-top: 10px;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Add New Book</h1>
+    <form th:action="@{/books/add}" method="post">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required>
+
+        <label for="author">Author:</label>
+        <input type="text" id="author" name="author" required>
+
+        <label for="available">Available:</label>
+        <input type="checkbox" id="available" name="available" checked> <!-- Default checked -->
+
+        <input type="submit" value="Add Book">
+    </form>
+    <p th:if="${successMessage}" class="message" th:text="${successMessage}"></p>
+    <p th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></p>
+    <p><a href="/" th:href="@{/home}">Back to Home</a></p>
+</body>
+</html>
