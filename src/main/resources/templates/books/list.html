@@ -20,15 +20,17 @@
             background-color: #3498db;
             color: white;
         }
-        .search-btn {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            margin-bottom: 20px;
-            border-radius: 5px;
-        }
+		button[type="submit"]{
+		           display: inline-block;
+		           padding: 4px 12px;
+		           text-decoration: none;
+		           color: white;
+		           background-color: #3498db;
+		           border-radius: 5px;
+		       }
+		       button[type="submit"]:hover {
+		           background-color: #2980b9;
+		       }
 		/* Styling for the search form */
 		       .search-box {
 		           margin: 20px;
@@ -56,6 +58,22 @@
 			              padding: 5px;
 			              border-bottom: 1px solid #ccc;
 			          }
+			  .message {
+			             padding: 10px;
+			             margin: 10px 0;
+			             border-radius: 5px;
+			         }
+			         .success {
+			             color: green;
+			             background-color: #e0f5e0;
+			         }
+			         .error {
+			             color: red;
+			             background-color: #f5e0e0;
+			         }
+					 .hidden {
+					            display: none;
+					        }
     </style>
 </head>
 <body>
@@ -72,33 +90,24 @@
 	                   xhr.onload = function () {
 	                       if (xhr.status === 200) {
 								const resultsContainer = document.getElementById("searchResults");
-								resultsContainer.innerHTML = "";  // Clear the old results
-	                           // Replace the search results with returned Thymeleaf-rendered HTML
+								resultsContainer.innerHTML = "";  
 	                           resultsContainer.innerHTML = xhr.responseText;
 							   
-							   // Re-set the input value to preserve it after the update
 							   document.getElementById("searchTerm").value = searchTerm;
 
-			                   // Keep the focus on the search input field
 			                   document.getElementById("searchTerm").focus();
 	                       }
 	                   };
 	                   xhr.send();
 	               } else {
-	                   // Clear search results if input is empty
 	                   document.getElementById("searchResults").innerHTML = "";
 	               }
 	           }
 	       </script>
 
     
-	<!-- Div to display search results -->
 	  <div id="searchResults" class="search-results">
-		<!-- Search form (input box and button) -->
 		<h1>Books List</h1>
-		<script>
-			document.getElementById("searchTerm").innerHTML = searchTerm;
-		</script>
 			   <div class="search-box">
 			       <form th:action="@{/books/search}" method="post">
 			           <input type="text" id="searchTerm" name="searchTerm" placeholder="Enter book title" onkeyup="searchBooks()">
@@ -114,6 +123,7 @@
 		                  <th>Title</th>
 		                  <th>Author</th>
 		                  <th>Available</th>
+						  <th th:if="${session.user == null || !session.user.adminUser}">Action</th>
 		              </tr>
 		          </thead>
 		          <tbody>
@@ -122,13 +132,39 @@
 		                  <td th:text="${book.title}"></td>
 		                  <td th:text="${book.author}"></td>
 		                  <td th:text="${book.available ? 'Yes' : 'No'}"></td>
+						  <td th:if="${session.user == null || !session.user.adminUser}"><form th:action="@{/transactions/issue/{id}(id=${book.id})}" method="post">
+							<!-- Check if session user is null. If so, set userId to 0 -->
+							      <input type="hidden" name="userId" th:value="${session.user != null ? session.user.id : 0}" />
+						          <button type="submit">Issue Book</button>
+						        </form>
+							</td>
 		              </tr>
 		          </tbody>
 		      </table> 
+			  <div th:if="${success}" style="color: green;" class="message success" id="successMessage">
+			  	          <p th:text="${success}"></p>
+			  	      </div>
+			  	      <div th:if="${error}" style="color: red;" class="message error" id="errorMessage">
+			  	          <p th:text="${error}"></p>
+			  	      </div>
 	<form class="search-box" th:action="@{/home}" method="get">
 	           <button type="submit">Back to Home</button>
 	       </form>
 	  </div>
-    
+	  <script>
+	         // Function to hide the message after a set timeout (e.g., 5 seconds)
+	         function hideMessage(messageId) {
+	             setTimeout(function() {
+	                 var messageElement = document.getElementById(messageId);
+	                 if (messageElement) {
+	                     messageElement.classList.add('hidden');
+	                 }
+	             }, 5000);  // 5000 milliseconds = 5 seconds
+	         }
+
+	         // Auto-hide success and error messages after 5 seconds
+	         hideMessage('successMessage');
+	         hideMessage('errorMessage');
+	     </script>
 </body>
 </html>

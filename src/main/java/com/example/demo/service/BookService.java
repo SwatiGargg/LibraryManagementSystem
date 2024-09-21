@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -8,11 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.Book;
+import com.example.demo.dto.IssuedBookDTO;
 import com.example.demo.repository.BookRepository;
+import com.example.demo.repository.TransactionRepository;
 @Service
 public class BookService {
 	@Autowired
     private BookRepository bookRepository;
+	@Autowired
+    private TransactionRepository transactionRepository;
 
     // Retrieve all books
 	 public List<Book> getAllBooks() {
@@ -35,8 +40,22 @@ public class BookService {
 	    public List<Book> searchBooksByTitle(String title) {
 	        return bookRepository.findByTitleContainingIgnoreCase(title);
 	    }
+	    
+	 // Method to get issued books and their issue dates for a specific user
+	    public List<IssuedBookDTO> getIssuedBooksAndIssueDatesByUser(Long userId) {
+	        List<Object[]> results = transactionRepository.findIssuedBooksAndIssueDateByUserId(userId);
+	        List<IssuedBookDTO> issuedBooks = new ArrayList<>();
 
+	        // Iterate through the results and map them to a DTO
+	        for (Object[] result : results) {
+	            Book book = (Book) result[0];
+	            LocalDateTime issueDate = (LocalDateTime) result[1];  // Adjust the type if issueDate is of a different type
+	            Long tranId = (Long) result[2];
+	            issuedBooks.add(new IssuedBookDTO(book, issueDate.toString(), tranId));
+	        }
 
+	        return issuedBooks;
+	    }
 
 
 }

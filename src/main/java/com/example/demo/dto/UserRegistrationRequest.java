@@ -3,16 +3,11 @@ package com.example.demo.dto;
 public class UserRegistrationRequest {
 	 private String username;
 	    private String password;
+	    private String confirmpassword;
+	    private String email;
 	    private Boolean adminUser;
 	    // Default constructor
 	    public UserRegistrationRequest() {}
-
-	    // Parameterized constructor
-	    public UserRegistrationRequest(String username, String password, String userType) {
-	        this.username = username;
-	        this.password = password;
-	        this.adminUser = true;
-	    }
 
 		public String getUsername() {
 			return username;
@@ -28,6 +23,23 @@ public class UserRegistrationRequest {
 
 		public void setPassword(String password) {
 			this.password = password;
+		}
+		
+
+		public String getConfirmpassword() {
+			return confirmpassword;
+		}
+
+		public void setConfirmpassword(String confirmpassword) {
+			this.confirmpassword = confirmpassword;
+		}
+
+		public String getEmail() {
+			return email;
+		}
+
+		public void setEmail(String email) {
+			this.email = email;
 		}
 
 		public Boolean getAdminUser() {

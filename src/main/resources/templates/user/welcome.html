@@ -47,14 +47,17 @@
 <body>
 
     <h1>Welcome to the Library Management System</h1>
-    <div class="button-container">
-        <button onclick="location.href='/issueBook'">Issue Book</button>
-        <button onclick="location.href='/returnBook'">Return Book</button>
-         <button onclick="location.href='/updateBook'">Update Book</button>
-        <button onclick="location.href='/books/addBook'">Add Book</button> <!-- New Add Book button -->
+     <div class="button-container" th:if="${session.user.adminUser == false}">
+        <button onclick="location.href='/transactions/issueBook'">Issue Book</button>
+        <button onclick="location.href='/transactions/returnBook'">Return Book</button>
+    </div>
+
+    <div class="button-container" th:if="${session.user.adminUser == true}">
+        <button onclick="location.href='/books/all'">View Books</button>
+        <button onclick="location.href='/books/addBook'">Add Books</button>
     </div>
     <div>
-        <button class="logout" onclick="location.href='/logout'">Logout</button>
+        <button class="logout" onclick="location.href='/users/logout'">Logout</button>
     </div>
 
 </body>

@@ -21,6 +21,9 @@ public class Users {
 	    @Column(nullable = false)
 	    private String password;
 	    
+	    @Column(nullable = false, unique = true)
+	    private String email;
+	    
 	    @Column(nullable = false)
 	    private Boolean adminUser; //  field for user type
 	    // Getters and Setters
@@ -48,6 +51,15 @@ public class Users {
 		public void setPassword(String password) {
 			this.password = password;
 		}
+		
+
+		public String getEmail() {
+			return email;
+		}
+
+		public void setEmail(String email) {
+			this.email = email;
+		}
 
 		public Boolean getAdminUser() {
 			return adminUser;
@@ -56,8 +68,5 @@ public class Users {
 		public void setAdminUser(Boolean adminUser) {
 			this.adminUser = adminUser;
 		}
-
-		
-
 
 }

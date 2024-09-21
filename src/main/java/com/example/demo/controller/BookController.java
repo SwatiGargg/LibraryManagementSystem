@@ -8,18 +8,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.dto.Book;
+import com.example.demo.dto.IssuedBookDTO;
+import com.example.demo.dto.Users;
 import com.example.demo.service.BookService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/books")
 public class BookController {
-	
-
 	    @Autowired
 	    private BookService bookService;
 	    
@@ -31,32 +32,14 @@ public class BookController {
 
 	    // Show list of books
 	    @GetMapping("/all")
-/*	    public ResponseEntity<List<Book>> getAllBooks() {
-	        List<Book> books = bookService.getAllBooks();
-	        return ResponseEntity.ok(books);
-	    }       */
 	    public String getAllBooks(Model model) {
 	        List<Book> books = bookService.getAllBooks();
 	        model.addAttribute("books", books);
 	        return "books/list"; // return the books.html template
-	    }
-
-	    // Search for a book
-//	    @GetMapping("/search/{id}")
-//	    public ResponseEntity<Book> searchBookById(@PathVariable Long id) {
-//	        Book book = bookService.getBookById(id);
-//	        if (book != null) {
-//	            return ResponseEntity.ok(book);
-//	        } else {
-//	            return ResponseEntity.notFound().build();
-//	        }
-//	    }
-	    
+	    }	    
 	    @PostMapping("/search")
 	    public String searchBooks(@RequestParam("searchTerm") String searchTerm, Model model) {
 	        List<Book> books = bookService.searchBooksByTitle(searchTerm);
-	        System.out.println("books"+books);
-	        System.out.println("searchTerm"+searchTerm);
 	        model.addAttribute("books", books);
 	        model.addAttribute("searchTerm", searchTerm);
 	        return "books/list";  // This will render the search result on the same list.html page
@@ -82,4 +65,20 @@ public class BookController {
 	            return "books/addBook"; // Return to the same page with error message
 	        }
 }
+	    @GetMapping("/issued")
+	    public String getIssuedBooks(Model model, HttpSession session) {
+	        // Retrieve the logged-in user from the session
+	        Users user = (Users) session.getAttribute("user");
+
+	        if (user != null) {
+	            // Fetch the list of issued books and their issue dates for this user
+	            List<IssuedBookDTO> issuedBooks = bookService.getIssuedBooksAndIssueDatesByUser(user.getId());
+
+	            model.addAttribute("issuedBooks", issuedBooks);
+	        } else {
+	            model.addAttribute("error", "You need to log in to view your issued books.");
+	        }
+
+	        return "books/issued"; 
+	    }
 }

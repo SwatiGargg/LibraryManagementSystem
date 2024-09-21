@@ -24,7 +24,7 @@ public class TransactionService {
     private UserRepository userRepository;
 
     // Issue a book
-    public void issueBook(Long userId, Long bookId) throws Exception {
+    public void issueBook(Long bookId, Long userId) throws Exception {
         Users user = userRepository.findById(userId)
             .orElseThrow(() -> new Exception("User not found"));
         Book book = bookRepository.findById(bookId)
@@ -34,6 +34,8 @@ public class TransactionService {
         if (!book.getAvailable()) {
             throw new Exception("Book is not available for issuance.");
         }
+        
+        System.out.println("book"+book);
 
         // Create a new transaction
         Transactions transaction = new Transactions();
@@ -50,24 +52,29 @@ public class TransactionService {
     }
 
     // Return a book
-    public void returnBook(Long userId, Long bookId) throws Exception {
+    public void returnBook(Long userId, Long bookId, Long transId) throws Exception {
         Users user = userRepository.findById(userId)
             .orElseThrow(() -> new Exception("User not found"));
         Book book = bookRepository.findById(bookId)
             .orElseThrow(() -> new Exception("Book not found"));
 
         // Find the transaction
-        Transactions transaction = transactionRepository.findByUserAndBook(user, book)
+        Transactions transaction = transactionRepository.findById(transId)
             .orElseThrow(() -> new Exception("Transaction not found"));
 
         // Update the return date
-        transaction.setReturnDate(LocalDateTime.now());
+        if(transaction.getReturnDate() == null) {
+        	transaction.setReturnDate(LocalDateTime.now());
+        	transactionRepository.save(transaction);
+        }
+        else
+        	throw new Exception("Book is already returned");
 
         // Save the transaction
-        transactionRepository.save(transaction);
 
         // Mark the book as available
         book.setAvailable(true);
         bookRepository.save(book);
     }
+    
 }

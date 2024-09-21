@@ -23,19 +23,19 @@ public class UserService {
         Users user = new Users();
         user.setUsername(request.getUsername());
         user.setPassword(request.getPassword()); // In a real application, hash the password before saving
+        user.setEmail(request.getEmail());
         user.setAdminUser(request.getAdminUser());
         userRepository.save(user);
     }
 
     // Log in a user
-    public boolean loginUser(UserLoginRequest request) {
+    public Users loginUser(UserLoginRequest request) {
         Users user = userRepository.findByUsername(request.getUsername());
         if (user != null && user.getPassword().equals(request.getPassword())) {
-            return true;
+            return user; // Return the user object if login is successful
         }
-        return false;
+        return null; // Return null if login fails
     }
-
     // Fetch user details by username
     public Users getUserByUsername(String username) throws Exception {
         Users user = userRepository.findByUsername(username);

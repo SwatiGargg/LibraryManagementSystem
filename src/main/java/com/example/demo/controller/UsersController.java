@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.demo.dto.UserLoginRequest;
 import com.example.demo.dto.UserRegistrationRequest;
 import com.example.demo.dto.Users;
 import com.example.demo.service.UserService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/users")
@@ -25,31 +26,20 @@ public class UsersController {
     @Autowired
     private UserService userService;
 
-    // Register a new user
-//    @PostMapping("/register")
-//    public ResponseEntity<?> registerUser(@RequestBody UserRegistrationRequest request) {
-//        try {
-//            userService.registerUser(request);
-//            return ResponseEntity.ok("User registered successfully.");
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().body("Failed to register user: " + e.getMessage());
-//        }
-//    }
-
     @GetMapping("/register")
-    public String showRegistrationForm() {
-       // model.addAttribute("userRegistrationRequest", new UserRegistrationRequest());
-        return "user/registeration"; // This refers to register.html
+    public String showRegistrationForm(Model model) {
+        model.addAttribute("user", new UserRegistrationRequest()); 
+        return "user/registeration"; 
     }
  // Register a new user
     @PostMapping("/registeration")
-    public String registerUser(@ModelAttribute UserRegistrationRequest request, Model model) {
+    public String registerUser(@ModelAttribute("user") UserRegistrationRequest request, Model model) {
         try {
             userService.registerUser(request);
-            model.addAttribute("successMessage", "User registered successfully.");
-            return "user/login"; // Redirect to login page or a success page
+            model.addAttribute("success", "User registered successfully.");
+            return "user/login"; // Redirect to login page
         } catch (Exception e) {
-            model.addAttribute("errorMessage", "Failed to register user: " + e.getMessage());
+            model.addAttribute("error", "Failed to register user: " + e.getMessage());
             return "user/registeration"; // Return to the registration page with error message
         }
     }
@@ -62,30 +52,24 @@ public class UsersController {
     
     // Handle login
     @PostMapping("/userlogin")
-    public String loginUser(@ModelAttribute UserLoginRequest request, Model model) {
-        boolean loginSuccessful = userService.loginUser(request); // Implement this method
-
-        if (loginSuccessful) {
-            return "user/welcome"; // Redirect to home or dashboard
+    public String loginUser(@ModelAttribute UserLoginRequest request, Model model, HttpSession session) {        
+        Users user = userService.loginUser(request); // using this method to return User object if successful
+        if (user != null) {
+        	session.setAttribute("user", user);
+            return "user/welcome"; // Redirect to dashboard
         } else {
             model.addAttribute("errorMessage", "Invalid username or password.");
             return "user/login"; // Return to login page with error message
         }
-    }
-    
-    
-    
-    // Log in a user
-//    @PostMapping("/login")
-//    public ResponseEntity<?> loginUser(@RequestBody UserLoginRequest request) {
-//        boolean success = userService.loginUser(request);
-//        if (success) {
-//            return ResponseEntity.ok("Login successful.");
-//        } else {
-//            return ResponseEntity.status(401).body("Invalid credentials.");
-//        }
-//    }
 
+    }
+    @GetMapping("/logout")
+    public String redirectToHome(Model model, HttpSession session) {
+    	if(session.getAttribute("user") != null) {
+    		session.setAttribute("user", null);
+    	}
+    	return "home";
+    }
     // Fetch user details by username
     @GetMapping("/{username}")
     public ResponseEntity<?> getUser(@PathVariable String username) {
