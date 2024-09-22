@@ -4,78 +4,174 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Registration</title>
+    
+    <!-- Add Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
     <style>
-		body {
-		          font-family: Arial, sans-serif;
-		          text-align: center;
-		          margin: 50px;
-		      }
-		      form {
-				display: inline-block;
-				text-align: left;
-				padding: 1em 6em 0px 4em;
-				border: 1px solid #3498db;
-				border-radius: 15px;
-		      }
-		      label {
-		          margin: 10px 0;
-		          display: block;
-		      }
-		      input[type="text"],
-		      input[type="email"],
-		      input[type="password"] , 
-			  select{
-		          width: 105%;
-		          padding: 10px;
-		          margin: 5px 0 15px;
-		          border: 1px solid #ccc;
-		          border-radius: 4px;
-		      }
-		      input[type="submit"] {
-				  display: inline-block;
-		          background-color: #3498db;
-		          color: white;
-				  width: 116%;
-  		          padding: 10px;
-  		          margin: 5px 0 15px;
-  		          border: 1px solid #ccc;
-  		          border-radius: 4px;
-		      }
-		      input[type="submit"]:hover {
-		          background-color: #2980b9;
-		      }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ecf0f1;
+            background-image: url('[[@{/images/library-background.jpg}]]');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .registration-container {
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 0em 2em;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            text-align: left;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 1em;
+        }
+
+        label {
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        .form-group {
+            position: relative;
+            margin: 15px 0;
+        }
+
+        .form-group i {
+            position: absolute;
+            top: 38px;
+            left: 10px;
+            color: #3498db;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 10px;
+            padding-left: 30px; /* Space for icon */
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            width: 86%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px; /* Space between buttons */
+        }
+		
+		.home-button {
+			display: inline-block;
+			padding: 12px;
+			background-color: #3498db;
+			color: white;
+			border-radius: 5px;
+			text-decoration: none;
+		}
+		.home-button:hover {
+		    background-color: #2980b9; /* Darker shade on hover */
+		}
+
+        input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+
+        p {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-bottom: 1em;
+        }
     </style>
 </head>
 <body>
-    <h1>User Registration</h1>
+    <div class="registration-container">
+        <h1>User Registration</h1>
 
-    <div th:if="${error}">
-        <p th:text="${error}" style="color: red;"></p>
+        <div th:if="${error}">
+            <p class="error-message" th:text="${error}"></p>
+        </div>
+
+        <form th:action="@{/users/registeration}" method="post" th:object="${user}">
+            <!-- Username Field with Icon -->
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <i class="fas fa-user"></i>
+                <input type="text" id="username" th:field="*{username}" required />
+            </div>
+            
+            <!-- Email Field with Icon -->
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="email" th:field="*{email}" required />
+            </div>
+            
+            <!-- Password Field with Icon -->
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" th:field="*{password}" required />
+            </div>
+            
+            <!-- Confirm Password Field with Icon -->
+            <div class="form-group">
+                <label for="confirmpassword">Confirm Password:</label>
+                <i class="fas fa-lock"></i>
+                <input type="password" id="confirmpassword" th:field="*{confirmpassword}" required />
+            </div>
+            
+            <!-- User Type Dropdown with Icon -->
+            <div class="form-group">
+                <label for="adminUser">Select User Type:</label>
+                <i class="fas fa-users"></i>
+                <select id="adminUser" th:field="*{adminUser}" required>
+                    <option value="false" disabled selected>-- Select User Type --</option>
+                    <option value="true">Admin</option>
+                    <option value="false">Student</option>
+                </select>
+            </div>
+
+          
+            <input type="submit" value="Register">
+			<a th:href="@{/home}" class="home-button"><i class="fas fa-home"></i> </a>
+			
+        </form>
+
+        <p>Already have an account? <a th:href="@{/users/login}">Login here</a>.</p>
     </div>
-
-    <form th:action="@{/users/registeration}" method="post" th:object="${user}">
-        <label for="username">Username:</label>
-        <input type="text" id="username" th:field="*{username}" required />
-		
-		<label for="username">Email:</label>
-		<input type="text" id="email" th:field="*{email}" required />
-				
-        <label for="password">Password:</label>
-        <input type="password" id="password" th:field="*{password}" required />
-		
-		<label for="confirmpassword">Confirm Password:</label>
-		<input type="password" id="confirmpassword" th:field="*{confirmpassword}" required />
-		
-		<label for="adminUser">Select User Type:</label>
-		        <select id="adminUser" th:field="*{adminUser}" required>
-		            <option value=false>-- Select User Type --</option>
-		            <option value=true>Admin</option>
-		            <option value=false>Student</option>
-		        </select>
-
-        <label><input type="submit" value="Register"></label>
-    </form>
-	
-	<p>Already have an account? <a th:href="@{/users/login}">Login here</a>.</p>
 </body>
 </html>

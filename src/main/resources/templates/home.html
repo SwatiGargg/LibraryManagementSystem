@@ -4,36 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library Management System</title>
+    <!-- Include Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin: 50px;
+            margin: 0;
+            padding: 0;
+           background-image: url('[[@{/images/library-background.jpg}]]');
+			background-size: cover; /* Ensures the image covers the entire screen */
+            background-position: center; /* Centers the image */
+            background-repeat: no-repeat; /* Prevents the image from repeating */
+            background-attachment: fixed; /* Keeps the background fixed when scrolling */
+            overflow: hidden;
+            height: 100vh;
+            color: white;
         }
-        h1 {
-            color: #2c3e50;
+		h1 {
+			font-size: 2em;
+            font-weight: bold;
+            color: #f1c40f;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(0deg, #8b4513, #d2691e, #f4a460); /* Gradient with brown and tan shades */
+            padding: 20px;
+            border-radius: 8px;
+            letter-spacing: 2px;
+            display: inline-block;
+            margin-top: 50px;
+		   }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 75vh;
         }
         a {
             display: inline-block;
             margin: 10px;
-            padding: 10px 20px;
+            padding: 15px 30px;
             text-decoration: none;
             color: white;
-            background-color: #3498db;
+            background-color: rgba(52, 152, 219, 0.9);
             border-radius: 5px;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+        a i {
+            margin-right: 10px;
         }
         a:hover {
-            background-color: #2980b9;
+            background-color: rgba(41, 128, 185, 0.8);
+        }
+        .icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        /* Style for mobile responsiveness */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 24px;
+            }
+            a {
+                padding: 10px 20px;
+                font-size: 16px;
+            }
         }
     </style>
 </head>
 <body>
     <h1>Welcome to the Library Management System</h1>
-    <div>
-        <a th:href="@{/books/all}">View Books</a>
-        <a th:href="@{/users/register}">Register</a>
-        <a th:href="@{/users/login}">Login</a>
+    <div class="container">
+        <div>
+            <a th:href="@{/books/all}">
+                <i class="fas fa-book"></i> View Books
+            </a>
+        </div>
+        <div>
+            <a th:href="@{/users/register}">
+                <i class="fas fa-user-plus"></i> Register
+            </a>
+        </div>
+        <div>
+            <a th:href="@{/users/login}">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+        </div>
     </div>
 </body>
 </html>
- 

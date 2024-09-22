@@ -34,9 +34,6 @@ public class TransactionService {
         if (!book.getAvailable()) {
             throw new Exception("Book is not available for issuance.");
         }
-        
-        System.out.println("book"+book);
-
         // Create a new transaction
         Transactions transaction = new Transactions();
         transaction.setUser(user);
@@ -46,8 +43,11 @@ public class TransactionService {
         // Save the transaction
         transactionRepository.save(transaction);
 
-        // Mark the book as not available
-        book.setAvailable(false);
+        book.setCount(book.getCount()-1);
+        if(book.getCount() > 0)
+        	book.setAvailable(true);
+        else
+        	book.setAvailable(false);
         bookRepository.save(book);
     }
 
@@ -74,6 +74,7 @@ public class TransactionService {
 
         // Mark the book as available
         book.setAvailable(true);
+        book.setCount(book.getCount()+1);
         bookRepository.save(book);
     }
     

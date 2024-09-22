@@ -4,60 +4,147 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Login</title>
+    
+    <!-- Add Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 50px;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ecf0f1;
+            background-image: url('[[@{/images/library-background.jpg}]]');
+            background-size: cover;
+            background-position: center;
         }
-        form {
-            display: inline-block;
+        
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 0em 2em;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+            width: 350px;
             text-align: left;
-            padding: 20px;
-            border: 1px solid #3498db;
-            border-radius: 5px;
         }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 1em;
+        }
+
         label {
-            margin: 10px 0;
-            display: block;
+            font-size: 14px;
+            color: #2c3e50;
         }
+
+        .form-group {
+            position: relative;
+            margin: 15px 0;
+        }
+
+        .form-group i {
+            position: absolute;
+            top: 38px;
+            left: 10px;
+            color: #3498db;
+        }
+
         input[type="text"],
         input[type="password"] {
             width: 100%;
             padding: 10px;
-            margin: 5px 0 15px;
+            padding-left: 30px; /* Space for icon */
+            margin: 5px 0;
             border: 1px solid #ccc;
-            border-radius: 4px;
+            border-radius: 5px;
+            box-sizing: border-box;
         }
+
         input[type="submit"] {
+            width: 86%;
+            padding: 12px;
             background-color: #3498db;
             color: white;
-            padding: 10px 15px;
             border: none;
             border-radius: 5px;
+            font-size: 16px;
             cursor: pointer;
+            margin-top: 10px; /* Space between buttons */
         }
+
         input[type="submit"]:hover {
             background-color: #2980b9;
         }
+
+        p {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
         .error-message {
             color: red;
+            text-align: center;
+            margin-bottom: 1em;
+        }
+
+        .home-button {
+            display: inline;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            width: 100%;
+            text-align: center;
             margin-top: 10px;
+        }
+
+        .home-button:hover {
+            background-color: #2980b9; /* Darker shade on hover */
         }
     </style>
 </head>
 <body>
-    <h1>User Login</h1>
-    <form th:action="@{/users/userlogin}" method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
+    <div class="login-container">
+        <h1>User Login</h1>
+		<div th:if="${errorMessage}" class="error-message" id="errorMessage">
+		            <p th:text="${errorMessage}"></p>
+		        </div>
+        <form th:action="@{/users/userlogin}" method="post">
+            <!-- Username Field with Icon -->
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <i class="fas fa-user"></i>
+                <input type="text" id="username" name="username" required />
+            </div>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
+            <!-- Password Field with Icon -->
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" name="password" required />
+            </div>
 
-        <input type="submit" value="Login">
-    </form>
-    <p class="error-message" th:if="${errorMessage}" th:text="${errorMessage}"></p>
-    <p>Don't have an account? <a th:href="@{/users/register}">Register here</a>.</p>
+            <input type="submit" value="Login">
+            <a th:href="@{/home}" class="home-button"><i class="fas fa-home"></i></a>
+        </form>
+
+        <p>Don't have an account yet? <a th:href="@{/users/register}">Register here</a>.</p>
+    </div>
 </body>
 </html>

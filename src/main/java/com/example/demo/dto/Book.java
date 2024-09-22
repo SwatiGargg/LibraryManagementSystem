@@ -23,6 +23,8 @@ public class Book {
 
     @Column(nullable = false)
     private Boolean available = true;
+    @Column
+    private Integer count = 1;
 
 	public Long getId() {
 		return id;
@@ -55,6 +57,15 @@ public class Book {
 	public void setAvailable(Boolean available) {
 		this.available = available;
 	}
+
+	public Integer getCount() {
+		return count;
+	}
+
+	public void setCount(Integer count) {
+		this.count = count;
+	}
+	
     
     
 }

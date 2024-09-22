@@ -4,67 +4,145 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Book</title>
+    
+    <!-- Add Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 50px;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ecf0f1;
+            background-image: url('[[@{/images/library-background.jpg}]]');
+            background-size: cover;
+            background-position: center;
         }
-        form {
-            display: inline-block;
+
+        .addBook-container {
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 1em 1em;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+            width: 20%;
             text-align: left;
-            padding: 20px;
-            border: 1px solid #3498db;
-            border-radius: 5px;
         }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+
         label {
-            margin: 10px 0;
-            display: block;
+            font-size: 14px;
+            color: #2c3e50;
         }
+
+        .form-group {
+            position: relative;
+            margin: 15px 0;
+        }
+
+        .form-group i {
+            position: absolute;
+            top: 38px;
+            left: 10px;
+            color: #3498db;
+        }
+
         input[type="text"] {
-            width: 95%;
+            width: 100%;
             padding: 10px;
-            margin: 5px 0 15px;
+            padding-left: 30px; /* Space for icon */
+            margin: 5px 0;
             border: 1px solid #ccc;
-            border-radius: 4px;
+            border-radius: 5px;
+            box-sizing: border-box;
         }
+
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
         input[type="submit"] {
+            width: 83%;
+            padding: 12px;
             background-color: #3498db;
             color: white;
-            padding: 10px 15px;
             border: none;
             border-radius: 5px;
+            font-size: 16px;
             cursor: pointer;
         }
+
         input[type="submit"]:hover {
             background-color: #2980b9;
         }
-        .message {
-            color: green;
-            margin-top: 10px;
+
+        .home-button {
+            display: inline;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            width: 48%;
+            text-align: center;
         }
-        .error-message {
-            color: red;
-            margin-top: 10px;
+
+        .home-button:hover {
+            background-color: #2980b9;
         }
+
+        p {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .message {    
+            text-align: center;
+            margin-bottom: 1em;
+        }
+		.success-message {
+		            color: green;
+		            
+		        }
+
+		        .error-message {
+		            color: red;
+		            
+		        }
     </style>
 </head>
 <body>
-    <h1>Add New Book</h1>
-    <form th:action="@{/books/add}" method="post">
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title" required>
+    <div class="addBook-container">
+        <h1>Add New Book</h1>
+        <form th:action="@{/books/add}" method="post">
+            <!-- Title Field with Icon -->
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <i class="fas fa-book"></i>
+                <input type="text" id="title" name="title" required>
+            </div>
 
-        <label for="author">Author:</label>
-        <input type="text" id="author" name="author" required>
+            <!-- Author Field with Icon -->
+            <div class="form-group">
+                <label for="author">Author:</label>
+                <i class="fas fa-user"></i>
+                <input type="text" id="author" name="author" required>
+            </div>
 
-        <label for="available">Available:</label>
-        <input type="checkbox" id="available" name="available" checked> <!-- Default checked -->
+            <input type="submit" value="Add Book">
+            <a th:href="@{/home}" class="home-button"><i class="fas fa-home"></i></a>
+            
+        </form>
 
-        <input type="submit" value="Add Book">
-    </form>
-    <p th:if="${successMessage}" class="message" th:text="${successMessage}"></p>
-    <p th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></p>
-    <p><a href="/" th:href="@{/home}">Back to Home</a></p>
+        <p th:if="${successMessage}" class="message success-message" th:text="${successMessage}"></p>
+        <p th:if="${errorMessage}" class="message error-message" th:text="${errorMessage}"></p>
+    </div>
 </body>
 </html>

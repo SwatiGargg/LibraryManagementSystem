@@ -34,11 +34,23 @@ public class BookService {
 	    }
 	 // Add a new book
 	    public void addBook(Book book) {
-	        bookRepository.save(book);
+	    	Book bk = getBookByTitleAndAuthor(book.getTitle(), book.getAuthor());
+	    	if(bk != null) {
+	    		bk.setCount(bk.getCount()+1);
+	    		bk.setAvailable(true);
+	    		bookRepository.save(bk);
+	    	}
+	    	else {
+	    		book.setAvailable(true);
+	    		bookRepository.save(book);
+	    	}
 	    }
 	    //search book by title
 	    public List<Book> searchBooksByTitle(String title) {
 	        return bookRepository.findByTitleContainingIgnoreCase(title);
+	    }
+	    public Book getBookByTitleAndAuthor(String title, String author) {
+	    	return bookRepository.findByTitleContainingIgnoreCaseAndAuthorContainingIgnoreCase(title, author);
 	    }
 	    
 	 // Method to get issued books and their issue dates for a specific user

@@ -20,6 +20,10 @@ public class UserService {
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new Exception("Username already exists.");
         }
+     // Validate confirm password
+        if (!request.getPassword().equals(request.getConfirmpassword())) {
+            throw new Exception("Passwords do not match.");
+        }
         Users user = new Users();
         user.setUsername(request.getUsername());
         user.setPassword(request.getPassword()); // In a real application, hash the password before saving

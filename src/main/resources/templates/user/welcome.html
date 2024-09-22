@@ -7,23 +7,52 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 20px;
             text-align: center;
+			background-color: #ecf0f1;
+            background-image: url('[[@{/images/a-book-520626_1920.jpg}]]');
+			background-size: cover; /* Ensures the image covers the entire screen */
+            background-position: center; /* Centers the image */
+            background-repeat: no-repeat; /* Prevents the image from repeating */
+            background-attachment: fixed; /* Keeps the background fixed when scrolling */
+            overflow: hidden;
+        }
+        header {
+            background-color: rgba(16, 163, 22, 0.5); /* Header background color */
+            color: white;
+            padding: 10px 0;
+            margin-bottom: 20px;
+            border-radius: 5px;
         }
         h1 {
-            color: #333;
+			font-size: 2em;
+            font-weight: bold;
+            color: #f1c40f;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(0deg, #8b4513, #d2691e, #f4a460); /* Gradient with brown and tan shades */
+            padding: 20px;
+            border-radius: 8px;
+            letter-spacing: 2px;
+            display: inline-block;
+            margin-top: 50px;
+        }
+        h2 {
+            font-size: 1.5em; /* Smaller font for the greeting */
+            margin: 0;
         }
         .button-container {
             margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap; /* Allows buttons to wrap on smaller screens */
         }
         button {
-            background-color: #4CAF50; /* Green */
+            background-color: #3498db; /* Blue */
             border: none;
             color: white;
-            padding: 15px 32px;
+            padding: 15px 30px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
@@ -31,34 +60,38 @@
             margin: 10px;
             cursor: pointer;
             border-radius: 5px;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.3s; /* Added transform for hover effect */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
         }
         button:hover {
-            background-color: #45a049; /* Darker green */
+            background-color: #2980b9; /* Darker blue */
+            transform: translateY(-2px); /* Slight lift on hover */
         }
         .logout {
-            background-color: #f44336; /* Red */
+            background-color: #e74c3c; /* Red */
         }
         .logout:hover {
-            background-color: #e53935; /* Darker red */
+            background-color: #c0392b; /* Darker red */
         }
     </style>
 </head>
 <body>
+    <header>
+        <!-- Check if user is logged in and display their name -->
+        <div th:if="${session.user != null}">
+            <h2>Hi, <span th:text="${session.user.username}"></span>!</h2>
+        </div>
+    </header>
 
     <h1>Welcome to the Library Management System</h1>
-     <div class="button-container" th:if="${session.user.adminUser == false}">
-        <button onclick="location.href='/transactions/issueBook'">Issue Book</button>
-        <button onclick="location.href='/transactions/returnBook'">Return Book</button>
-    </div>
-
-    <div class="button-container" th:if="${session.user.adminUser == true}">
-        <button onclick="location.href='/books/all'">View Books</button>
-        <button onclick="location.href='/books/addBook'">Add Books</button>
+    <div class="button-container">
+        <button th:if="${session.user != null && !session.user.adminUser}" onclick="location.href='/transactions/issueBook'">Issue Book</button>
+        <button th:if="${session.user != null && !session.user.adminUser}" onclick="location.href='/transactions/returnBook'">Return Book</button>
+        <button th:if="${session.user != null && session.user.adminUser}" onclick="location.href='/books/all'">View Books</button>
+        <button th:if="${session.user != null && session.user.adminUser}" onclick="location.href='/books/addBook'">Add Book</button>
     </div>
     <div>
         <button class="logout" onclick="location.href='/users/logout'">Logout</button>
     </div>
-
 </body>
 </html>

@@ -13,5 +13,5 @@ import com.example.repository.PsqlRepository;
 public interface BookRepository extends PsqlRepository<Book, Long>{
     List<Book> findByTitleContainingIgnoreCase(String title);
     List<Book> findByAuthorContainingIgnoreCase(String author);
-
+     Book findByTitleContainingIgnoreCaseAndAuthorContainingIgnoreCase(String title, String author);
 }
