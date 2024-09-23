@@ -53,16 +53,16 @@ public class BookController {
 	    public String addBook(@ModelAttribute Book book, Model model) {
 	        // Check if the checkbox was checked
 	        if (book.getAvailable() == null) {
-	            book.setAvailable(false); // If not checked, set to false
+	            book.setAvailable(false); 
 	        }
 
 	        try {
 	            bookService.addBook(book);
 	            model.addAttribute("successMessage", "Book added successfully.");
-	            return "books/addBook"; // Return to the same page to add more books
+	            return "books/addBook"; 
 	        } catch (Exception e) {
 	            model.addAttribute("errorMessage", "Failed to add book: " + e.getMessage());
-	            return "books/addBook"; // Return to the same page with error message
+	            return "books/addBook"; 
 	        }
 }
 	    @GetMapping("/issued")

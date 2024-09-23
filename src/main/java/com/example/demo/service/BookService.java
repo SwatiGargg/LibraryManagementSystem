@@ -21,7 +21,7 @@ public class BookService {
 
     // Retrieve all books
 	 public List<Book> getAllBooks() {
-	        Iterable<Book> booksIterable = bookRepository.findAll();
+	        Iterable<Book> booksIterable = bookRepository.findAllBooks();
 	        List<Book> books = new ArrayList<>();
 	        booksIterable.forEach(books::add); // Convert Iterable to List
 	        return books;

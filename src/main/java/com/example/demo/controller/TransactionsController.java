@@ -32,11 +32,9 @@ public class TransactionsController {
         // Issue the book to the logged-in user
         try {
         	transactionService.issueBook(id, userId);
-        	 // Use RedirectAttributes to pass success message during the redirect
             redirectAttributes.addFlashAttribute("success", "Book issued successfully.");
             return "redirect:/books/all";
         } catch (Exception e) {
-        	// Use RedirectAttributes to pass error message during the redirect
             redirectAttributes.addFlashAttribute("error", "An error occurred while issuing the book. -"+e.getMessage());
             return "redirect:/books/all";
         }
